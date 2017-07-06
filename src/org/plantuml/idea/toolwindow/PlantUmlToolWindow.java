@@ -99,10 +99,14 @@ public class PlantUmlToolWindow extends JPanel implements Disposable {
         imagesPanel = new JPanel();
         imagesPanel.setLayout(new BoxLayout(imagesPanel, BoxLayout.Y_AXIS));
 
-        scrollPane = new JBScrollPane(imagesPanel);
+        JPanel wrapperPanel = new JPanel(new GridBagLayout());
+        wrapperPanel.add(imagesPanel);
+
+        scrollPane = new JBScrollPane(wrapperPanel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+
         imagesPanel.add(new Usage("Usage:\n"));
-        
+
         add(scrollPane, BorderLayout.CENTER);
 
         addScrollBarListeners(imagesPanel);
