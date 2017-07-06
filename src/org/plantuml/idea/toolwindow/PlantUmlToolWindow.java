@@ -190,28 +190,25 @@ public class PlantUmlToolWindow extends JPanel implements Disposable {
 //                            selectedPage = selectedPagePersistentStateComponent.getPage(last.getSourceFilePath());
 //                            logger.debug("file switched, setting selected page ",selectedPage);
 //                        }
+
+                        if (last == null) {
+                            logger.debug("nothing needed");
+                            return;
+                        }
                         
-                        if (last != null && reason == RenderCommand.Reason.REFRESH) {
+                        if (reason == RenderCommand.Reason.REFRESH) {
                             logger.debug("empty source, executing command, reason=", reason);
                             lazyExecutor.execute(getCommand(RenderCommand.Reason.REFRESH, last.getSourceFilePath(), last.getSource(), last.getBaseDir(), selectedPage, zoom, null, delay));
                         }
 
-                        if (last != null && last.isIncludedFile(selectedFile)) {
-                            logger.debug("include file selected");
-                            if (last.isIncludedFileChanged(selectedFile, fileDocumentManager)) {
-                                logger.debug("includes changed, executing command");
-                                lazyExecutor.execute(getCommand(RenderCommand.Reason.INCLUDES, last.getSourceFilePath(), last.getSource(), last.getBaseDir(), selectedPage, zoom, last, delay));
-                            } else if (last.renderRequired(selectedPage, zoom, fileEditorManager, fileDocumentManager)) {
-                                logger.debug("render required");
-                                lazyExecutor.execute(getCommand(RenderCommand.Reason.SOURCE_PAGE_ZOOM, last.getSourceFilePath(), last.getSource(), last.getBaseDir(), selectedPage, zoom, last, delay));
-                            } else {
-                                logger.debug("include file, not changed");
-                            }
-                        } else if (last != null && !renderCache.isDisplayed(last, selectedPage)) {
-                            logger.debug("empty source, not include file, displaying cached item ", last);
+                        if (last.renderRequired(selectedPage, zoom, fileEditorManager, fileDocumentManager)) {
+                            logger.debug("render required");
+                            lazyExecutor.execute(getCommand(RenderCommand.Reason.SOURCE_PAGE_ZOOM, last.getSourceFilePath(), last.getSource(), last.getBaseDir(), selectedPage, zoom, last, delay));
+                        }
+
+                        if (!renderCache.isDisplayed(last, selectedPage)) {
+                            logger.debug("empty source, displaying cached item ", last);
                             displayExistingDiagram(last);
-                        } else {
-                            logger.debug("nothing needed");
                         }
                         return;
                     }

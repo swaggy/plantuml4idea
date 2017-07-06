@@ -10,13 +10,17 @@ import org.plantuml.idea.util.UIUtils;
  */
 public abstract class ZoomAction extends DumbAwareAction {
     protected static int DEFAULT_ZOOM = 100;
-    protected static int MAX_ZOOM = 500;
     protected static int MIN_ZOOM = 20;
     protected static int ZOOM_STEP = 20;
 
     protected int getZoom(Project project) {
         PlantUmlToolWindow plantUML = UIUtils.getPlantUmlToolWindow(project);
         return plantUML.getZoom();
+    }
+
+    protected int getFitZoom(Project project) {
+        PlantUmlToolWindow plantUML = UIUtils.getPlantUmlToolWindow(project);
+        return plantUML.getWidth();
     }
 
     protected void setZoom(Project project, int zoom) {

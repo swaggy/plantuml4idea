@@ -2,8 +2,10 @@ package org.plantuml.idea.rendering;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
+import com.intellij.util.ui.UIUtil;
 import net.sourceforge.plantuml.*;
 import net.sourceforge.plantuml.core.Diagram;
+import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.cucadiagram.DisplayPositionned;
 import net.sourceforge.plantuml.descdiagram.DescriptionDiagram;
@@ -14,8 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.plantuml.idea.plantuml.PlantUml;
 
-import java.io.File;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -78,14 +84,12 @@ public class PlantUmlRenderer {
         }
     }
 
-    public static Pair<Integer, Titles> zoomDiagram(SourceStringReader reader, int zoom) {
-        logger.debug("zooming diagram");
+    public static Pair<Integer, Titles> getDiagram(SourceStringReader reader, int zoom) {
+        logger.debug("getting diagram");
         int totalPages = 0;
         List<BlockUml> blocks = reader.getBlocks();
 
-        for (int i = 0; i < blocks.size(); i++) {
-            BlockUml block = blocks.get(i);
-
+        for (BlockUml block : blocks) {
             long start = System.currentTimeMillis();
             checkCancel();
             Diagram diagram = block.getDiagram();
@@ -98,15 +102,16 @@ public class PlantUmlRenderer {
             totalPages = totalPages + diagram.getNbImages();
         }
         Titles titles = getTitles(totalPages, blocks);
-        return new Pair<Integer, Titles>(totalPages, titles);
+        return new Pair<>(totalPages, titles);
     }
 
     private static void zoomDiagram(Diagram diagram, int zoom) {
+        double scaleFactor = Math.max(1, Math.min(zoom / 100f, 2));
         if (diagram instanceof UmlDiagram) {
             UmlDiagram umlDiagram = (UmlDiagram) diagram;
             Scale scale = umlDiagram.getScale();
             if (scale == null) {
-                umlDiagram.setScale(new ScaleSimple(zoom / 100f));
+                umlDiagram.setScale(new ScaleSimple(scaleFactor));
             }
         } else if (diagram instanceof NewpagedDiagram) {
             NewpagedDiagram newpagedDiagram = (NewpagedDiagram) diagram;
@@ -115,11 +120,33 @@ public class PlantUmlRenderer {
                     DescriptionDiagram descriptionDiagram = (DescriptionDiagram) page;
                     Scale scale = descriptionDiagram.getScale();
                     if (scale == null) {
-                        descriptionDiagram.setScale(new ScaleSimple(zoom / 100f));
+                        descriptionDiagram.setScale(new ScaleSimple(scaleFactor));
                     }
                 }
             }
         }
+    }
+
+    public static DiagramDescription outputImage(SourceStringReader reader, OutputStream destination, int page, FileFormatOption format, int width) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        DiagramDescription description = reader.outputImage(output, page, format);
+        output.close();
+
+        ByteArrayInputStream input = new ByteArrayInputStream(output.toByteArray());
+        BufferedImage image = ImageIO.read(input);
+        double scale = (double)width / (double)image.getWidth();
+        int scaledWidth = (int)(image.getWidth() * scale);
+        int scaledHeight = (int)(image.getHeight() * scale);
+
+        Image scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+        BufferedImage bufferedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D imageGraphics = bufferedImage.createGraphics();
+        imageGraphics.drawImage(scaledImage, null, null);
+        ImageOutputStream imageOutputStream = new MemoryCacheImageOutputStream(destination);
+        ImageIO.write(bufferedImage, format.getFileFormat().name(), imageOutputStream);
+        imageOutputStream.close();
+
+        return description;
     }
 
     @NotNull

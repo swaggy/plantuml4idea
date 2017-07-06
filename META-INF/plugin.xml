@@ -129,6 +129,8 @@
                     icon="/graph/zoomOut.png" text="Zoom Out"/>
             <action id="PlantUML.ZoomActual" description="Actual Zoom" class="org.plantuml.idea.action.ZoomActualAction"
                     icon="/graph/actualZoom.png" text="Actual Zoom"/>
+            <action id="PlantUML.ZoomFit" description="Zoom to Fit" class="org.plantuml.idea.action.ZoomFitAction"
+                    icon="/graph/fitContent.png" text="Fit Zoom"/>
             <separator/>
 
             <action id="PlantUML.PrevPage" description="Prev Page" class="org.plantuml.idea.action.PrevPageAction"

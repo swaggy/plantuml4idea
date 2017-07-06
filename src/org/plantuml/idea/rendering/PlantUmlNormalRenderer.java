@@ -17,7 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static org.plantuml.idea.rendering.PlantUmlRenderer.zoomDiagram;
+import static org.plantuml.idea.rendering.PlantUmlRenderer.getDiagram;
+import static org.plantuml.idea.rendering.PlantUmlRenderer.outputImage;
 
 
 public class PlantUmlNormalRenderer {
@@ -47,12 +48,15 @@ public class PlantUmlNormalRenderer {
             PlantUmlIncludes.commitIncludes(source, baseDir);
             SourceStringReader reader = new SourceStringReader(source);
 
-            zoomDiagram(reader, zoom);
+            getDiagram(reader, zoom);
 
             if (requestedPageNumber >= 0) {
                 outputStream = new FileOutputStream(fileName);
-                reader.generateImage(outputStream, requestedPageNumber, new FileFormatOption(format.getFormat()));
-                outputStream.close();
+                try {
+                    outputImage(reader, outputStream, requestedPageNumber, new FileFormatOption(format.getFormat()), zoom);
+                } finally {
+                    outputStream.close();
+                }
             } else {
                 List<BlockUml> blocks = reader.getBlocks();
                 int imageСounter = 0;
@@ -64,7 +68,7 @@ public class PlantUmlNormalRenderer {
                         String fName = imageСounter == 0 ? fileName : String.format(fileNameFormat, imageСounter);
                         outputStream = new FileOutputStream(fName);
                         try {
-                            reader.generateImage(outputStream, imageСounter++, new FileFormatOption(format.getFormat()));
+                            outputImage(reader, outputStream, imageСounter++, new FileFormatOption(format.getFormat()), zoom);
                         } finally {
                             outputStream.close();
                         }
@@ -86,7 +90,7 @@ public class PlantUmlNormalRenderer {
             // image generation.
             SourceStringReader reader = new SourceStringReader(documentSource);
 
-            Pair<Integer, Titles> pages = zoomDiagram(reader, renderRequest.getZoom());
+            Pair<Integer, Titles> pages = getDiagram(reader, renderRequest.getZoom());
             Integer totalPages = pages.first;
             Titles titles = pages.second;
 
@@ -203,7 +207,7 @@ public class PlantUmlNormalRenderer {
 
         DiagramDescription diagramDescription;
         try {
-            diagramDescription = reader.outputImage(imageStream, page, formatOption);
+            diagramDescription = outputImage(reader, imageStream, page, formatOption, renderRequest.getZoom());
         } catch (UnsupportedOperationException e) {
             throw e;
         } catch (Exception e) {
@@ -230,7 +234,7 @@ public class PlantUmlNormalRenderer {
     protected byte[] generateSvg(SourceStringReader reader, int i) throws IOException {
         long start = System.currentTimeMillis();
         ByteArrayOutputStream svgStream = new ByteArrayOutputStream();
-        reader.generateImage(svgStream, i, SVG);
+        reader.outputImage(svgStream, i, SVG);
         byte[] svgBytes = svgStream.toByteArray();
         logger.debug("generated ", SVG.getFileFormat(), " for page ", i, " in ", System.currentTimeMillis() - start, "ms");
         return svgBytes;
