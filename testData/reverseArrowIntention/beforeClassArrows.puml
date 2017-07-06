@@ -2,7 +2,7 @@
 @startuml
 
 Class01    <caret><|--   Class02
-Class03    <caret>*--    Class04
+Class03    <caret>--    Class04
 Class05    <caret>o--    Class06
 Class07    <caret>..     Class08
 Class09    <caret>--     Class10
@@ -10,7 +10,7 @@ Class11    <caret><|..   Class12
 Class13    <caret>-->    Class14
 Class15    <caret>..>    Class16
 Class17    <caret>..|>   Class18
-Class19    <caret><--*   Class20
+Class19    <caret><--   Class20
 
 
 

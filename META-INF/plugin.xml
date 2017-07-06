@@ -26,7 +26,7 @@
             <ul>
               <li>NPE fix for AndroidStudio</li>
               <li>PlantUml library upgrade to v2017.08</li>
-              <li>Added support for *.plantuml file extension</li>
+              <li>Added support for .plantuml file extension</li>
             </ul>
             <p>2.5.0</p>
             <ul>
@@ -130,7 +130,7 @@
             <action id="PlantUML.ZoomActual" description="Actual Zoom" class="org.plantuml.idea.action.ZoomActualAction"
                     icon="/graph/actualZoom.png" text="Actual Zoom"/>
             <separator/>
-            
+
             <action id="PlantUML.PrevPage" description="Prev Page" class="org.plantuml.idea.action.PrevPageAction"
                     icon="/actions/back.png" text="Previous Page"/>
             <action id="PlantUML.NextPage" description="Next Page" class="org.plantuml.idea.action.NextPageAction"

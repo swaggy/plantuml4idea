@@ -5,7 +5,7 @@ Alice <-    Bob: foo
 Alice <--   Bob: foo
 Alice <---  Bob: foo
 
-          
+
 Alice --    Bob: foo
 Alice -->   Bob: foo
 

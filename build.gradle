@@ -9,11 +9,10 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
-    compile files('lib/plantuml.1.2017.12.jar') 
+    compile files('lib/plantuml.1.2017.13.jar')
     testCompile 'junit:junit:4.12'
 }
 
-// non-standad layout was used, hence this override
 sourceSets {
     main {
         java {
@@ -32,9 +31,10 @@ sourceSets {
         }
     }
 }
-// non-standad layout was used, hence this override
+
+// Non-standard layout was used, hence this override
 processResources {
     into('META-INF') {
-		from('META-INF') 
+		from('META-INF')
 	}
 }

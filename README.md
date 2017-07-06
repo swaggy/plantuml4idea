@@ -9,40 +9,40 @@ Author: [Eugene Steinberg](https://github.com/esteinberg)
 
 Contributors:
 
- * [Ivan Mamontov](https://github.com/IvanMamontov)
- * [Henady Zakalusky](https://github.com/hza)
- * [Max Gorbunov](https://github.com/6zow)
- * [Vojtěch Krása](https://github.com/krasa)
- * [Andrew Korolev](https://github.com/koroandr)
+  [Ivan Mamontov](https://github.com/IvanMamontov)
+  [Henady Zakalusky](https://github.com/hza)
+  [Max Gorbunov](https://github.com/6zow)
+  [Vojtěch Krása](https://github.com/krasa)
+  [Andrew Korolev](https://github.com/koroandr)
 
 # Features
 
-* PlantUML tool window renders PlantUML source code under caret in currently selected editor
-* Supports multiple sources per file
-* Supports pagination and zoom
-* Can copy diagram to clipboard or export as PNG, EPS or SVG, ASCII Art
+ PlantUML tool window renders PlantUML source code under caret in currently selected editor
+ Supports multiple sources per file
+ Supports pagination and zoom
+ Can copy diagram to clipboard or export as PNG, EPS or SVG, ASCII Art
 
 # Tips
 
-* PlantUML code must be inside @startuml and @enduml tags to be rendered.
-* To be able to generate many diagram types, you must have [Graphviz](http://plantuml.sourceforge.net/graphvizdot.html)
+ PlantUML code must be inside @startuml and @enduml tags to be rendered.
+ To be able to generate many diagram types, you must have [Graphviz](http://plantuml.sourceforge.net/graphvizdot.html)
  installed on your machine. About screen tests your installation.
-* Image cache size can be tuned in the settings, if you have not enough heap.
+ Image cache size can be tuned in the settings, if you have not enough heap.
 
 # Developer notes
-* [How to setup the project](https://cloud.githubusercontent.com/assets/1160875/24718610/f66fd85a-1a36-11e7-8180-59100603a740.gif)
-* debug logs can be enabled by adding '#org.plantuml' to [Help | Debug Log Settings] 
+ [How to setup the project](https://cloud.githubusercontent.com/assets/1160875/24718610/f66fd85a-1a36-11e7-8180-59100603a740.gif)
+ debug logs can be enabled by adding '#org.plantuml' to [Help | Debug Log Settings]
 
 ## There are following branches:
 
 ### master
-* Current production branch
+ Current production branch
 
 ### 1.x
-* deprecated branch, to be deleted
+ deprecated branch, to be deleted
 
 ### grammar
-* Contains new experimental syntax support
-* Grammar classes can be generated using tools/grammar-gen.sh
-* This script can run automatically when you run the plugin using "Plugin" Run/Debug confuguration. Just add the script
+ Contains new experimental syntax support
+ Grammar classes can be generated using tools/grammar-gen.sh
+ This script can run automatically when you run the plugin using "Plugin" Run/Debug confuguration. Just add the script
 above as an external tool and make it run before the "Make" step.

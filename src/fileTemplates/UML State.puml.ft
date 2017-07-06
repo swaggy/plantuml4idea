@@ -1,15 +1,15 @@
 @startuml
 scale 350 width
-[*] --> NotShooting
+[] --> NotShooting
 
 state NotShooting {
-  [*] --> Idle
+  [] --> Idle
   Idle --> Configuring : EvConfig
   Configuring --> Idle : EvConfig
 }
 
 state Configuring {
-  [*] --> NewValueSelection
+  [] --> NewValueSelection
   NewValueSelection --> NewValuePreview : EvNewValue
   NewValuePreview --> NewValueSelection : EvNewValueRejected
   NewValuePreview --> NewValueSelection : EvNewValueSaved
